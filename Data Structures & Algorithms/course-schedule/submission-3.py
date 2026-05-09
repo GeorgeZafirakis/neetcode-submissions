@@ -1,0 +1,33 @@
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        
+        preMap = { i : [] for i in range(numCourses)}
+        for crs, pre in prerequisites:
+            preMap[crs].append(pre)
+
+        visited = set()    # recursion stack
+        processed = set()  # fully processed courses
+        
+        def dfs(crs):
+
+            # Base Case
+            if crs in visited:
+                return False
+            if crs in processed:
+                return True
+
+            # Recursive Case
+            visited.add(crs)
+            for pre in preMap[crs]:
+                if not dfs(pre):
+                    return False
+            visited.remove(crs)
+            processed.add(crs)
+            return True
+
+        for c in range(numCourses):
+            if not dfs(c):
+                return False
+        return True
+            
+            
